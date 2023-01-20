@@ -6,11 +6,21 @@ import { saveAs } from 'file-saver';
 
 const Home = () => {
 
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState('https://www.google.com/');
   const [color, setColor] = useState('#000000');
   const [bgColor, setBgColor] = useState('#FFFFFF');
   const [size, setSize] = useState('128');
+  const [format, setFormat] = useState('L');
   const [nameFile, setNameFile] = useState('qr-code-by-Guss');
+
+  const [srcImg, setSrcImg] = useState('');
+  const [imgSize, setImgSize] = useState(40);
+
+  const imageSettings = {
+    src: srcImg,
+    height: imgSize,
+    width: imgSize,
+  }
 
   const handleDownload = () => {
     let img = document.querySelector('#qr-code-img');
@@ -37,12 +47,27 @@ const Home = () => {
             <Form.Control type='color' onChange={(e) => setBgColor(e.target.value)} value={bgColor} />
           </Form.Group>
         </Row>
+        <Row>
+          <Form.Group className='mb-4'>
+            <Form.Label><FontAwesomeIcon icon="fa-solid fa-ruler-combined" /> Tamanho da Imagem</Form.Label>
+            <Form.Range onChange={(e) => setImgSize(e.target.value)} defaultValue={imgSize} min='20' max='60' />
+          </Form.Group>
+        </Row>
+        <Row>
+          <Form.Group className='mb-4'>
+            <Form.Label><FontAwesomeIcon icon="fa-solid fa-palette" /> Modelo</Form.Label>
+            <Form.Select onChange={(e) => setFormat(e.target.value)}>
+              <option value="L">Modelo 1</option>
+              <option value="Q">Modelo 2</option>
+            </Form.Select>
+          </Form.Group>
+        </Row>
         <Form.Group className='mb-4'>
-          <Form.Label><FontAwesomeIcon icon="fa-solid fa-ruler-combined" /> Tamanho</Form.Label>
+          <Form.Label><FontAwesomeIcon icon="fa-solid fa-ruler-combined" /> Tamanho do QRCode</Form.Label>
           <Form.Range onChange={(e) => setSize(e.target.value)} defaultValue={size} min='100' max='320' />
         </Form.Group>
         <div className="text-center my-4">
-          <QRCodeCanvas id='qr-code-img' value={url} fgColor={color} bgColor={bgColor} size={size} />
+          <QRCodeCanvas id='qr-code-img' value={url} fgColor={color} bgColor={bgColor} size={size} level={format} imageSettings={imageSettings} />
         </div>
         <Row className='d-flex align-items-end'>
           <Form.Group as={Col} md="10" className='mb-4'>
